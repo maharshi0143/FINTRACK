@@ -20,4 +20,13 @@ router.post('/logout', authController.logout);
 // Get Current User
 router.get('/me', authMiddleware, authController.getMe);
 
+// Google Login
+router.post('/google', authController.googleLogin);
+
+// Forgot Password
+router.post('/forgot-password', authController.forgotPassword);
+
+// reset Password
+router.post('/reset-password', authController.resetPassword);
+
 module.exports = router;

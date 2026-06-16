@@ -1,11 +1,13 @@
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 const AppError = require('../utils/AppError');
 const userRepository = require('../repositories/user.repository');
 const refreshTokenRepository = require('../repositories/refreshToken.repository');
 
 const { generateAccessToken, generateRefreshToken, verifyRefreshToken } = require('../utils/jwt');
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // Register a new user
 async function registerUser(name, email, password) {
@@ -75,7 +77,8 @@ async function refreshAccessToken(refreshToken) {
     );
   }
 
-  verifyRefreshToken(refreshToken);
+  const payload =
+    verifyRefreshToken(refreshToken);
 
   const storedToken =
     await refreshTokenRepository.findRefreshToken(
@@ -88,9 +91,6 @@ async function refreshAccessToken(refreshToken) {
       401
     );
   }
-
-  const payload =
-    verifyRefreshToken(refreshToken);
 
   const accessToken =
     generateAccessToken(payload.userId);
@@ -132,7 +132,197 @@ async function getCurrentUser(userId){
     if(!user){
         throw new AppError('User not found', 404);
     }
-    return user;
+    const { password_hash, ...safeUser } = user;
+    return safeUser;
+}
+
+// Google OAuth Login
+async function googleLogin(
+    idToken
+) {
+
+    // Verify token with Google
+    const ticket =
+        await client.verifyIdToken({
+            idToken,
+            audience:
+                process.env.GOOGLE_CLIENT_ID
+        });
+
+    // Extract user information
+    const payload =
+        ticket.getPayload();
+
+    const {
+        sub,
+        name,
+        email
+    } = payload;
+
+    // Find user by Google ID
+    let user =
+        await userRepository.findUserByGoogleId(
+            sub
+        );
+
+    // First login with this Google account
+    if (!user) {
+
+        // Check if email already exists (registered via email/password)
+        const existingUser =
+            await userRepository.findUserByEmail(
+                email
+            );
+
+        if (existingUser) {
+            // Link Google account to existing user
+            user =
+                await userRepository.linkGoogleAccount(
+                    existingUser.id,
+                    sub
+                );
+        } else {
+            // Create a new user with Google account
+            user =
+                await userRepository.createGoogleUser(
+                    name,
+                    email,
+                    sub
+                );
+        }
+    }
+
+    // Generate tokens
+    const accessToken =
+        generateAccessToken(
+            user.id
+        );
+
+    const refreshToken =
+        generateRefreshToken(
+            user.id
+        );
+
+    // Save refresh token
+    const expiresAt =
+        new Date(
+            Date.now()
+            + 7 * 24 * 60 * 60 * 1000
+        );
+
+    await refreshTokenRepository
+        .createRefreshToken(
+            user.id,
+            refreshToken,
+            expiresAt
+        );
+
+    return {
+        accessToken,
+        refreshToken,
+        user
+    };
+}
+
+// Forgot Password - Generate Reset Token
+async function forgotPassword(
+    email
+) {
+
+    // Find user
+    const user =
+        await userRepository.findUserByEmail(
+            email
+        );
+
+    if (!user) {
+
+        throw new AppError(
+            'User not found',
+            404
+        );
+
+    }
+
+    // Generate secure token
+    const resetToken =
+        crypto
+            .randomBytes(32)
+            .toString('hex');
+
+    // Expire after 15 minutes
+    const expires =
+        new Date(
+            Date.now()
+            + 15 * 60 * 1000
+        );
+
+    // Store token
+    await userRepository.updateResetPasswordToken(
+        user.id,
+        resetToken,
+        expires
+    );
+
+    return {
+        resetToken
+    };
+
+}
+
+
+// Reset password
+async function resetPassword(
+    token,
+    newPassword
+) {
+
+    // Find user by token
+    const user =
+        await userRepository.findUserByResetToken(
+            token
+        );
+
+    if (!user) {
+
+        throw new AppError(
+            'Invalid reset token',
+            400
+        );
+
+    }
+
+    // Check expiration
+    if (
+        user.reset_password_expires
+        < new Date()
+    ) {
+
+        throw new AppError(
+            'Reset token expired',
+            400
+        );
+
+    }
+
+    // Hash password
+    const passwordHash =
+        await bcrypt.hash(
+            newPassword,
+            12
+        );
+
+    // Update password
+    await userRepository.updatePassword(
+        user.id,
+        passwordHash
+    );
+
+    // Clear token
+    await userRepository.clearResetPasswordToken(
+        user.id
+    );
+
 }
 
 module.exports = {
@@ -140,5 +330,8 @@ module.exports = {
     loginUser,
     refreshAccessToken,
     logoutUser,
-    getCurrentUser
+    getCurrentUser,
+    googleLogin,
+    forgotPassword,
+    resetPassword
 }

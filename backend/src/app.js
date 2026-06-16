@@ -15,7 +15,10 @@ const authRoutes = require("./routes/auth.routes");
 const transactionRoutes = require("./routes/transaction.routes");
 const analyticsRoutes = require("./routes/analytics.routes");
 const budgetRoutes = require("./routes/budget.routes");
-
+const aiRoutes = require("./routes/ai.routes");
+const profileRoutes = require("./routes/profile.routes");
+const categoryRoutes = require("./routes/category.routes");
+const notificationRoutes = require("./routes/notification.routes"); 
 
 const app = express();
 
@@ -32,6 +35,10 @@ app.use("/api/transactions", transactionRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/budgets", budgetRoutes);
 app.use("/api/health", healthRoutes);
+app.use("/api/ai", aiRoutes);
+app.use("/api/profile", profileRoutes);
+app.use("/api/categories", categoryRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

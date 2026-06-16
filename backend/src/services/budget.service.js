@@ -1,7 +1,6 @@
-const budgetRepository = require(
-    '../repositories/budget.repository'
-);
-
+const AppError = require('../utils/AppError');
+const budgetRepository = require('../repositories/budget.repository');
+const { getIO } = require("../socket/socket");
 // Create a budget
 async function createBudget(
     user_id,
@@ -14,6 +13,13 @@ async function createBudget(
             user_id,
             category,
             monthly_limit
+        );
+
+    getIO()
+        .to(user_id)
+        .emit(
+            'budgetCreated',
+            budget
         );
 
     return budget;
@@ -32,6 +38,12 @@ async function updateBudget(id, user_id, category, monthly_limit){
     if(!budget){
         throw new AppError("Budget not found or you don't have permission to update it", 404);
     }
+    getIO()
+    .to(user_id)
+    .emit(
+        'budgetUpdated',
+        budget
+    );
     return budget;
 }
 
@@ -41,6 +53,14 @@ async function deleteBudget(id, user_id){
     if(!budget){
         throw new AppError("Budget not found or you don't have permission to delete it", 404);
     }
+    getIO()
+    .to(user_id)
+    .emit(
+        'budgetDeleted',
+        {
+            id
+        }
+    );
     return budget;
 }
 
@@ -65,11 +85,13 @@ async function getBudgetProgress(userId) {
                 monthlyLimit - spent;
 
             const percentageUsed =
-                Number(
-                    (
-                        (spent / monthlyLimit) * 100
-                    ).toFixed(2)
-                );
+                monthlyLimit === 0
+                    ? 0
+                    : Number(
+                          (
+                              (spent / monthlyLimit) * 100
+                          ).toFixed(2)
+                      );
 
             return {
                 category: budget.category,
