@@ -10,7 +10,7 @@ Track expenses, manage budgets, and get AI-powered financial insights.
 
 **Backend** — Express 5, PostgreSQL (NeonDB), Socket.IO, JWT, Groq AI (Llama 3.3 70B), Google OAuth
 
-**Infrastructure** — Docker, Nginx, Vercel (frontend), Railway (backend), NeonDB (database)
+**Infrastructure** — Vercel (frontend), Render (backend), NeonDB (database)
 
 ---
 
@@ -111,18 +111,7 @@ Open `http://localhost:5173` in your browser.
 
 ---
 
-## Docker (Local)
 
-```bash
-docker compose up -d --build
-```
-
-- Frontend: `http://localhost:5173`
-- Backend: `http://localhost:4000`
-
-Nginx proxies `/api/*` and `/socket.io/*` to the backend container, so the frontend uses relative URLs (`VITE_API_URL=/api`, `VITE_SOCKET_URL=""`).
-
----
 
 ## Production Deployment
 
@@ -132,30 +121,31 @@ Nginx proxies `/api/*` and `/socket.io/*` to the backend container, so the front
 Browser
   │
   ├── Static assets from Vercel CDN
-  ├── API calls  → https://api.your-domain.com/api/*
-  └── WebSocket  → wss://api.your-domain.com/socket.io
+  ├── API calls  → https://fintrack-1i9s.onrender.com/api/*
+  └── WebSocket  → wss://fintrack-1i9s.onrender.com
                         │
-              Railway (Docker — Node.js)
+                  Render (Node.js)
                         │
-              NeonDB (PostgreSQL)
+                  NeonDB (PostgreSQL)
 ```
 
-### Deploy Backend (Railway)
+### Deploy Backend (Render)
 
 1. Push code to GitHub
-2. Create a new project on [Railway](https://railway.app) → **Deploy from GitHub repo**
+2. Create a new **Web Service** on [Render](https://render.com) → Connect your GitHub repo
 3. Set the **Root Directory** to `backend`
-4. Add environment variables (see table above) in Railway's dashboard
-5. Railway auto-detects `backend/Dockerfile` and deploys
-6. Generate a domain (e.g., `fintrack-backend.up.railway.app`)
+4. Set **Build Command** to `npm install`
+5. Set **Start Command** to `npm start`
+6. Add environment variables (see table above) in Render's dashboard
+7. Render deploys and provides a URL like `https://fintrack-1i9s.onrender.com`
 
 ### Deploy Frontend (Vercel)
 
 1. Create a new project on [Vercel](https://vercel.com) → Import your GitHub repo
 2. Set the **Root Directory** to `frontend`
 3. Add environment variables in Vercel's dashboard:
-   - `VITE_API_URL` → `https://fintrack-backend.up.railway.app/api`
-   - `VITE_SOCKET_URL` → `https://fintrack-backend.up.railway.app`
+   - `VITE_API_URL` → `https://fintrack-1i9s.onrender.com/api`
+   - `VITE_SOCKET_URL` → `https://fintrack-1i9s.onrender.com`
    - `VITE_GOOGLE_CLIENT_ID` → your client ID
 4. Vercel auto-detects Vite and runs `npm run build`
 5. A `vercel.json` file in the frontend root handles SPA routing
@@ -170,7 +160,7 @@ Add your production frontend URL to the Google Cloud Console:
 
 ### After deployment
 
-Update the backend's `CLIENT_URL` environment variable on Railway to point to your Vercel URL.
+Update the backend's `CLIENT_URL` environment variable on Render to point to your Vercel URL.
 
 ---
 
@@ -282,7 +272,6 @@ fintrack/
 │   │   ├── queries/         # Reference SQL (queries.sql)
 │   │   ├── app.js           # Express app setup
 │   │   └── server.js        # Entry point
-│   ├── Dockerfile
 │   └── package.json
 │
 ├── frontend/
@@ -306,13 +295,10 @@ fintrack/
 │   │   ├── AppRoutes.jsx    # Route definitions
 │   │   └── index.css        # Tailwind imports + globals
 │   ├── public/
-│   ├── Dockerfile
-│   ├── nginx.conf
 │   └── package.json
 │
 ├── docs/
 │   └── FINTRACK.docx
-├── docker-compose.yml
 ├── .gitignore
 └── README.md
 ```
