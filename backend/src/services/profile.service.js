@@ -61,11 +61,6 @@ async function changePassword(
 async function deleteProfile(
     userId
 ) {
-    await profileRepository
-        .deleteUserData(
-            userId
-        );
-
     const user =
         await profileRepository
             .deleteProfile(

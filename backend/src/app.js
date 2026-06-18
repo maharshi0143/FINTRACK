@@ -8,7 +8,7 @@ const cookieParser = require("cookie-parser");
 const healthRoutes = require("./routes/health.routes");
 
 const corsOptions = require("./config/cors");
-const rateLimiter = require("./middlewares/rateLimiter.middleware");
+const { globalLimiter, authLimiter, aiLimiter, budgetLimiter, transactionsLimiter, analyticsLimiter, profileLimiter, categoriesLimiter, notificationsLimiter } = require("./middlewares/rateLimiter.middleware");
 const notFound = require("./middlewares/notFound.middleware");
 const errorHandler = require("./middlewares/error.middleware");
 const authRoutes = require("./routes/auth.routes");
@@ -27,18 +27,18 @@ app.use(cors(corsOptions));
 app.use(helmet());
 app.use(morgan("dev"));
 app.use(cookieParser());
-app.use(rateLimiter);
+app.use(globalLimiter);
 
 // API Routes
-app.use("/api/auth", authRoutes);
-app.use("/api/transactions", transactionRoutes);
-app.use("/api/analytics", analyticsRoutes);
-app.use("/api/budgets", budgetRoutes);
+app.use("/api/auth", authLimiter, authRoutes);
+app.use("/api/transactions", transactionsLimiter, transactionRoutes);
+app.use("/api/analytics", analyticsLimiter, analyticsRoutes);
+app.use("/api/budgets", budgetLimiter, budgetRoutes);
 app.use("/api/health", healthRoutes);
-app.use("/api/ai", aiRoutes);
-app.use("/api/profile", profileRoutes);
-app.use("/api/categories", categoryRoutes);
-app.use("/api/notifications", notificationRoutes);
+app.use("/api/ai", aiLimiter, aiRoutes);
+app.use("/api/profile", profileLimiter, profileRoutes);
+app.use("/api/categories", categoriesLimiter, categoryRoutes);
+app.use("/api/notifications", notificationsLimiter, notificationRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

@@ -42,14 +42,19 @@ async function deleteRefreshToken(token) {
 
     const result = await pool.query(query, [token]);
 
-    console.log("Deleted rows:", result.rowCount);
-    console.log("Deleted token:", result.rows[0]);
+
 
     return result.rows[0];
+}
+
+async function deleteExpiredTokens() {
+    const query = "DELETE FROM refresh_tokens WHERE expires_at < NOW()";
+    await pool.query(query);
 }
 
 module.exports = {
     createRefreshToken,
     findRefreshToken,
-    deleteRefreshToken
+    deleteRefreshToken,
+    deleteExpiredTokens
 };

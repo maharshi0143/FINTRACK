@@ -56,9 +56,24 @@ async function getTopExpenses(req,res,next){
     }
 }
 
+// Get all dashboard data in one call
+async function getDashboardData(req, res, next) {
+    try {
+        const data = await analyticsService.getDashboardData(req.user.id);
+
+        res.status(200).json({
+            success: true,
+            data
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
     getSummary,
     getMonthlyAnalytics,
     getCategoryAnalytics,
-    getTopExpenses
+    getTopExpenses,
+    getDashboardData,
 };

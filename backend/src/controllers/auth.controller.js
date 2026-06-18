@@ -12,6 +12,24 @@ async function register(req,res,next){
                 message:"Name, email and password are required"
             });
         }
+        if (typeof password !== 'string' || password.length < 6) {
+            return res.status(400).json({
+                success:false,
+                message:"Password must be at least 6 characters"
+            });
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            return res.status(400).json({
+                success:false,
+                message:"Please provide a valid email address"
+            });
+        }
+        if (!email.endsWith('@gmail.com')) {
+            return res.status(400).json({
+                success:false,
+                message:"Only @gmail.com email addresses are allowed"
+            });
+        }
 
         const user = await authService.registerUser(name, email, password);
 
@@ -40,6 +58,12 @@ async function login(req,res,next){
                 message:"Email and password are required"
             });
         }
+        if (!email.endsWith('@gmail.com')) {
+            return res.status(400).json({
+                success:false,
+                message:"Only @gmail.com email addresses are allowed"
+            });
+        }
 
         const result = await authService.loginUser(email, password);
 
@@ -53,8 +77,8 @@ async function login(req,res,next){
         notificationService.createNotification(
             result.user.id,
             'New Login',
-            'New login detected on your account. If this was you, you can ignore this.'
-        );
+            'New login detected on your account.'
+        ).catch((e) => console.error('Notification failed:', e.message));
 
         res.status(200).json({
             success: true,
@@ -74,12 +98,19 @@ async function login(req,res,next){
 // Refresh Access Token
 async function refresh(req,res,next){
     try{
-        const refreshToken = req.cookies.refreshToken;
-        const accessToken = await authService.refreshAccessToken(refreshToken);
+        const oldRefreshToken = req.cookies.refreshToken;
+        const result = await authService.refreshAccessToken(oldRefreshToken);
+
+        res.cookie('refreshToken', result.refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
 
         res.status(200).json({
             success: true,
-            accessToken
+            accessToken: result.accessToken
         });
     }catch (error) {
         next(error);
@@ -90,13 +121,14 @@ async function refresh(req,res,next){
 // User Logout
 async function logout(req, res, next) {
     try {
-
-        console.log(req.cookies);
         const refreshToken = req.cookies.refreshToken;
-        console.log('Refresh token from cookie:', refreshToken);
         await authService.logoutUser(refreshToken);
 
-        res.clearCookie('refreshToken');
+        res.clearCookie('refreshToken', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+        });
 
         res.status(200).json({
             success: true,
@@ -116,7 +148,6 @@ async function getMe(req, res, next) {
         req.user.id
       );
 
-      console.log(req.user);
     res.status(200).json({
       success: true,
       data: user
@@ -150,8 +181,8 @@ async function googleLogin(req,res,next){
         notificationService.createNotification(
             result.user.id,
             'New Login',
-            'New Google login detected on your account.'
-        );
+            'New login detected on your account.'
+        ).catch((e) => console.error('Notification failed:', e.message));
 
         res.status(200).json({
             success: true,
@@ -169,7 +200,7 @@ async function googleLogin(req,res,next){
 }
 
 
-// Forgot Password
+// Forgot Password — generate reset token (no email service, return token directly)
 async function forgotPassword(req,res,next){
     try{
         const { email } = req.body;
@@ -180,12 +211,26 @@ async function forgotPassword(req,res,next){
             });
         }
 
+        if (!email.endsWith('@gmail.com')) {
+            return res.status(400).json({
+                success: false,
+                message: 'Only @gmail.com emails are allowed'
+            });
+        }
+
         const result = await authService.forgotPassword(email);
+
+        if (!result.resetToken) {
+            return res.status(200).json({
+                success: true,
+                message: 'If an account exists with that email, a reset link would be sent'
+            });
+        }
 
         res.status(200).json({
             success: true,
-            message: 'Password reset token generated. Please check your email.',
-            data: result
+            data: { resetToken: result.resetToken },
+            message: 'Use this token to reset your password'
         });
     } catch (error) {
         next(error);
@@ -207,8 +252,7 @@ async function resetPassword(req,res,next){
 
         res.status(200).json({
             success: true,
-            message: 'Password reset successful',
-            data: result
+            message: 'Password reset successful'
         }); 
     } catch (error) {
         next(error);

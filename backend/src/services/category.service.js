@@ -9,7 +9,12 @@ async function createCategory(userId, name, icon, color, type) {
 
 // Get categories
 async function getCategories(userId) {
-    return await categoryRepository.getCategories(userId);
+    const categories = await categoryRepository.getCategories(userId);
+    if (categories.length === 0) {
+        await categoryRepository.createDefaultCategories(userId);
+        return await categoryRepository.getCategories(userId);
+    }
+    return categories;
 }
 
 // Update a category by ID
@@ -30,9 +35,14 @@ async function deleteCategory(categoryId, userId) {
     return category;
 }
 
+async function createDefaultCategories(userId) {
+    return await categoryRepository.createDefaultCategories(userId);
+}
+
 module.exports = {
     createCategory,
     getCategories,
     updateCategory,
-    deleteCategory
+    deleteCategory,
+    createDefaultCategories,
 };

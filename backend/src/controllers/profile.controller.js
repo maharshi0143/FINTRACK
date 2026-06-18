@@ -87,7 +87,11 @@ async function changePassword(
 async function deleteProfile(req,res,next){
     try{
         await profileService.deleteProfile(req.user.id);
-        res.clearCookie('refreshToken');
+        res.clearCookie('refreshToken', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+        });
         res.status(200).json({
             success: true,
             message: 'Profile deleted successfully'

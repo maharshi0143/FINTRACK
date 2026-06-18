@@ -41,6 +41,13 @@ async function updateCategory(req,res,next){
     try{
         const { name, icon, color, type } = req.body;
 
+        if(!name || !type){
+            return res.status(400).json({
+                success: false,
+                message: "Name and type are required"
+            });
+        }
+
         const category = await categoryService.updateCategory(
             req.params.id,
             req.user.id,

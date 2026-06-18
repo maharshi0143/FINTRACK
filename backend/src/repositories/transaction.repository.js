@@ -83,28 +83,22 @@ async function getTransactions(
 
     }
 
-  const allowedSortFields = [
-    'date',
-    'amount',
-    'created_at'
-];
+  const sortFieldMap = {
+    date: 'date',
+    amount: 'amount',
+    created_at: 'created_at',
+  };
 
-if (
-    !allowedSortFields.includes(sortBy)
-) {
-    sortBy = 'date';
-}
-
-sortOrder =
-    sortOrder?.toUpperCase() === 'ASC'
-        ? 'ASC'
-        : 'DESC';
+  const safeSortBy = sortFieldMap[sortBy] || 'date';
+  const safeSortOrder = sortOrder?.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
 
 query += `
-    ORDER BY ${sortBy} ${sortOrder}
-    LIMIT ${limit}
-    OFFSET ${offset}
+    ORDER BY ${safeSortBy} ${safeSortOrder}
+    LIMIT $${parameterIndex}
+    OFFSET $${parameterIndex + 1}
 `;
+
+  values.push(limit, offset);
 
   const result = await pool.query(
     query,
@@ -115,7 +109,7 @@ query += `
 }
 
 // Get transaction count
-async function getTransactionCount(userId, search, type){
+async function getTransactionCount(userId, search, type, category, startDate, endDate){
     let query = "SELECT COUNT(*) As total FROM transactions WHERE user_id = $1";
     const values = [userId];
     let parameterIndex = 2;
@@ -129,6 +123,24 @@ async function getTransactionCount(userId, search, type){
     if (type) {
         query += ` AND type = $${parameterIndex}`;
         values.push(type);
+        parameterIndex++;
+    }
+
+    if (category) {
+        query += ` AND category = $${parameterIndex}`;
+        values.push(category);
+        parameterIndex++;
+    }
+
+    if (startDate) {
+        query += ` AND date >= $${parameterIndex}`;
+        values.push(startDate);
+        parameterIndex++;
+    }
+
+    if (endDate) {
+        query += ` AND date <= $${parameterIndex}`;
+        values.push(endDate);
         parameterIndex++;
     }
 
@@ -146,7 +158,7 @@ async function getTransactionById(transactionId, userId){
 
 // Update transaction
 async function updateTransaction(transactionId, userId, title, amount, type, category, date, notes){
-    const query = "UPDATE transactions SET title = $3, amount = $4, type = $5, category = $6, date = $7, notes = $8 WHERE id = $1 AND user_id = $2 RETURNING *";
+    const query = "UPDATE transactions SET title = $3, amount = $4, type = $5, category = $6, date = $7, notes = $8, updated_at = CURRENT_TIMESTAMP WHERE id = $1 AND user_id = $2 RETURNING *";
 
     const result = await pool.query(query, [transactionId, userId, title, amount, type, category, date, notes]);
     return result.rows[0];

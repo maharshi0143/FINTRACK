@@ -94,6 +94,7 @@ async function getBudgetProgress(userId) {
                       );
 
             return {
+                id: budget.id,
                 category: budget.category,
                 monthly_limit: monthlyLimit,
                 spent,

@@ -56,23 +56,10 @@ async function updatePassword(userId, passwordHash) {
     return result.rowCount > 0;
 }
 
-// Delete all user related data
-async function deleteUserData(userId) {
-    const queries = [
-        'DELETE FROM refresh_tokens WHERE user_id = $1',
-        'DELETE FROM budgets WHERE user_id = $1',
-        'DELETE FROM transactions WHERE user_id = $1',
-    ];
-    for (const query of queries) {
-        await pool.query(query, [userId]);
-    }
-}
-
 // Delete profile
 async function deleteProfile(
     userId
 ) {
-
     const query = `
         DELETE FROM users
         WHERE id = $1
@@ -91,6 +78,5 @@ module.exports = {
     getProfile,
     updateProfile,
     updatePassword,
-    deleteUserData,
     deleteProfile
 };

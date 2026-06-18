@@ -49,14 +49,15 @@ async function getMonthlyAnalytics(userId){
 async function getCategoryAnalytics(userId) {
     const query = `
         SELECT
-            category,
-            SUM(amount) AS total
-        FROM transactions
-
+            COALESCE(c1.name, c2.name, t.category) AS category,
+            SUM(t.amount) AS total
+        FROM transactions t
+        LEFT JOIN categories c1 ON c1.name = t.category AND c1.user_id = $1
+        LEFT JOIN categories c2 ON c2.id::text = t.category AND c2.user_id = $1
         WHERE
-            user_id = $1
-            AND type = 'expense'
-        GROUP BY category
+            t.user_id = $1
+            AND t.type = 'expense'
+        GROUP BY COALESCE(c1.name, c2.name, t.category)
         ORDER BY total DESC
     `;
 
@@ -68,13 +69,17 @@ async function getCategoryAnalytics(userId) {
 async function getTopExpenses(userId){
     const query = `
         SELECT
-            title,
-            amount
-        FROM transactions
+            t.title,
+            t.amount,
+            COALESCE(c1.name, c2.name, t.category) AS category,
+            t.date
+        FROM transactions t
+        LEFT JOIN categories c1 ON c1.name = t.category AND c1.user_id = $1
+        LEFT JOIN categories c2 ON c2.id::text = t.category AND c2.user_id = $1
         WHERE
-            user_id = $1
-            AND type = 'expense'
-        ORDER BY amount DESC
+            t.user_id = $1
+            AND t.type = 'expense'
+        ORDER BY t.amount DESC
         LIMIT 5
     `;
     const result = await pool.query(query, [userId]);

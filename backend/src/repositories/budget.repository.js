@@ -17,7 +17,7 @@ async function getBudgets(user_id){
 
 // Update a budget by ID
 async function updateBudget(id, user_id, category, monthly_limit){
-    const query = "UPDATE budgets SET category = $3, monthly_limit = $4 WHERE id = $1 AND user_id = $2 RETURNING *";
+    const query = "UPDATE budgets SET category = $3, monthly_limit = $4, updated_at = CURRENT_TIMESTAMP WHERE id = $1 AND user_id = $2 RETURNING *";
     const result = await pool.query(query, [id, user_id, category, monthly_limit]);
     return result.rows[0];
 }
@@ -35,6 +35,7 @@ async function getBudgetProgress(userId) {
     const query = `
         SELECT
 
+            b.id,
             b.category,
 
             b.monthly_limit,
@@ -50,8 +51,12 @@ async function getBudgetProgress(userId) {
 
         ON
             b.user_id = t.user_id
-            AND b.category = t.category
+            AND (
+                b.category = t.category
+                OR t.category = (SELECT c.id::text FROM categories c WHERE c.name = b.category AND c.user_id = b.user_id LIMIT 1)
+            )
             AND t.type = 'expense'
+            AND DATE_TRUNC('month', t.date) = DATE_TRUNC('month', CURRENT_DATE)
 
         WHERE b.user_id = $1
 

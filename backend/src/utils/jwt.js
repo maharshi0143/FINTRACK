@@ -5,9 +5,9 @@ function generateAccessToken(userId) {
         {
             userId
         },
-        process.env.JWT_SECRET,
+        process.env.JWT_SECRET || 'fallback_dev_secret_change_in_prod',
         {
-            expiresIn: process.env.JWT_EXPIRES_IN
+            expiresIn: process.env.JWT_EXPIRES_IN || '15m'
         }
     );
 }

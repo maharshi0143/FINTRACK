@@ -1,5 +1,7 @@
+const env = require('./env');
+
 const corsOptions = {
-    origin: '*',
+    origin: env.CLIENT_URL,
     credentials: true,
 };
 

@@ -30,11 +30,7 @@ async function findUserById(userId) {
     WHERE id = $1
   `;
 
-  console.log("Finding user by ID:", userId);
-
   const result = await pool.query(query, [userId]);
-
-  console.log("User found:", result.rows[0]);
 
   return result.rows[0];
 }

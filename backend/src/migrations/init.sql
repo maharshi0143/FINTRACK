@@ -114,3 +114,17 @@ CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON notifications(user_id);
 CREATE INDEX IF NOT EXISTS idx_refresh_tokens_token ON refresh_tokens(token);
 CREATE INDEX IF NOT EXISTS idx_categories_user_id ON categories(user_id);
 CREATE INDEX IF NOT EXISTS idx_ai_chats_user_id ON ai_chats(user_id);
+
+-- Composite indexes for analytics performance
+CREATE INDEX IF NOT EXISTS idx_transactions_user_date ON transactions(user_id, date);
+CREATE INDEX IF NOT EXISTS idx_transactions_user_type_category ON transactions(user_id, type, category);
+CREATE INDEX IF NOT EXISTS idx_transactions_user_type_amount ON transactions(user_id, type, amount DESC);
+
+-- Unique constraint on categories per user
+DO $$ BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_constraint WHERE conname = 'uq_categories_user_name'
+  ) THEN
+    ALTER TABLE categories ADD CONSTRAINT uq_categories_user_name UNIQUE (user_id, name);
+  END IF;
+END $$;

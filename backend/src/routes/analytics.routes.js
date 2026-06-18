@@ -16,4 +16,7 @@ router.get('/category', authMiddleware, analyticsController.getCategoryAnalytics
 // Get top-expenses summary
 router.get('/top-expenses', authMiddleware, analyticsController.getTopExpenses);
 
+// Get all dashboard data in one call
+router.get('/dashboard', authMiddleware, analyticsController.getDashboardData);
+
 module.exports = router;

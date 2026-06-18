@@ -60,14 +60,28 @@ async function getTopExpenses(userId){
     return result.map(
         item => ({
             title: item.title,
-            amount: Number(item.amount)
+            amount: Number(item.amount),
+            category: item.category,
+            date: item.date,
         })
     );
+}
+
+async function getDashboardData(userId) {
+    const [summary, monthly, category, topExpenses] = await Promise.all([
+        getSummary(userId),
+        getMonthlyAnalytics(userId),
+        getCategoryAnalytics(userId),
+        getTopExpenses(userId),
+    ]);
+
+    return { summary, monthly, category, topExpenses };
 }
 
 module.exports = {
     getSummary,
     getMonthlyAnalytics,
     getCategoryAnalytics,
-    getTopExpenses
+    getTopExpenses,
+    getDashboardData,
 };

@@ -8,7 +8,7 @@ async function checkBudgetThresholds(userId, category) {
     try {
         const budgets = await budgetRepository.getBudgetProgress(userId);
         const budget = budgets.find(b => b.category === category);
-        if (budget) {
+        if (budget && Number(budget.monthly_limit) > 0) {
             const percentage = (Number(budget.spent) / Number(budget.monthly_limit)) * 100;
             if (percentage >= 100) {
                 await notificationService.createNotification(
@@ -69,7 +69,7 @@ async function getTransactions(userId, limit, page, search, type, category, star
     const offset = (page - 1) * limit;
 
     const transactions = await transactionRepository.getTransactions(userId, limit, offset, search, type, category, startDate, endDate, sortBy, sortOrder);
-    const total = await transactionRepository.getTransactionCount(userId, search, type);
+    const total = await transactionRepository.getTransactionCount(userId, search, type, category, startDate, endDate);
     return { transactions, total, currentPage: page, totalPages: Math.ceil(total / limit) };
 }
 

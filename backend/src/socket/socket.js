@@ -1,12 +1,13 @@
 const { Server } = require("socket.io");
 const jwt = require('jsonwebtoken');
+const env = require('../config/env');
 
 let io;
 
 function initializeSocket(server){
     io = new Server(server,{
         cors: {
-            origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+            origin: env.CLIENT_URL,
             credentials: true
         }
     });
@@ -28,18 +29,10 @@ function initializeSocket(server){
     io.on(
     'connection',
     socket => {
-        console.log(
-            'User connected:',
-            socket.id,
-            'userId:',
-            socket.userId
-        );
-
         socket.join(String(socket.userId));
-        console.log(`User ${socket.userId} joined their room`);
 
         socket.on('disconnect',() => {
-            console.log('User disconnected:',socket.id);
+            // no-op
         });
     });
 }
