@@ -4,7 +4,6 @@ import {
   Bell,
   CheckCheck,
   Trash2,
-  X,
   Loader2,
   AlertCircle,
 } from 'lucide-react';
@@ -130,7 +129,7 @@ function NotificationsPage() {
       <motion.div
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between"
+        className="flex items-center justify-between flex-wrap gap-3"
       >
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-violet-500/20 border border-blue-500/30 flex items-center justify-center">
@@ -138,7 +137,7 @@ function NotificationsPage() {
           </div>
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="text-2xl font-bold text-white">Notifications</h1>
+              <h1 className="text-2xl font-bold text-white font-heading">Notifications</h1>
               {unreadCount > 0 && (
                 <span className="px-2 py-0.5 text-xs font-semibold rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">
                   {unreadCount} new
@@ -211,7 +210,7 @@ function NotificationsPage() {
               <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-4">
                 <Bell size={32} className="text-slate-500" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-1">No notifications yet</h3>
+              <h3 className="text-lg font-semibold text-white mb-1 font-heading">No notifications yet</h3>
               <p className="text-sm text-slate-400">
                 We&apos;ll notify you when something important happens
               </p>
@@ -287,6 +286,7 @@ function NotificationsPage() {
                             onClick={() => handleMarkAsRead(notification.id)}
                             disabled={isMarking || isDeleting}
                             className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:text-blue-400 hover:bg-blue-500/10 transition-all disabled:opacity-40"
+                            aria-label="Mark as read"
                             title="Mark as read"
                           >
                             {isMarking ? (
@@ -300,6 +300,7 @@ function NotificationsPage() {
                           onClick={() => handleDelete(notification.id)}
                           disabled={isDeleting || isMarking}
                           className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-all disabled:opacity-40"
+                          aria-label="Delete notification"
                           title="Delete"
                         >
                           {isDeleting ? (

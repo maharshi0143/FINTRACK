@@ -183,7 +183,7 @@ function BudgetModal({ open, onClose, onSubmit, editingBudget, categories }) {
                 <div className="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
                   <Target className="w-5 h-5 text-blue-400" />
                 </div>
-                <h2 className="text-lg font-semibold text-white">
+                <h2 className="text-lg font-semibold text-white font-heading">
                   {editingBudget ? 'Edit Budget' : 'Create Budget'}
                 </h2>
               </div>
@@ -309,7 +309,7 @@ function DeleteConfirm({ budget, onClose, onConfirm, loading }) {
             <div className="w-14 h-14 rounded-2xl bg-red-500/10 flex items-center justify-center mx-auto mb-4">
               <AlertTriangle className="w-7 h-7 text-red-400" />
             </div>
-            <h2 className="text-lg font-semibold text-white mb-2">
+            <h2 className="text-lg font-semibold text-white mb-2 font-heading">
               Delete Budget
             </h2>
             <p className="text-sm text-white/60 mb-6">
@@ -456,7 +456,7 @@ export default function BudgetsPage() {
     <div className="space-y-8">
       {/* ── Header ── */}
       <motion.div
-        className="flex items-center justify-between"
+        className="flex items-center justify-between flex-wrap gap-3"
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
@@ -466,7 +466,7 @@ export default function BudgetsPage() {
             <Wallet className="w-6 h-6 text-blue-400" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-white">Budgets</h1>
+            <h1 className="text-2xl font-bold text-white font-heading">Budgets</h1>
             <p className="text-sm text-white/50">
               Track and manage your spending limits
             </p>
@@ -554,7 +554,7 @@ export default function BudgetsPage() {
               <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-4">
                 <Target className="w-8 h-8 text-white/30" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2">
+              <h3 className="text-lg font-semibold text-white mb-2 font-heading">
                 No budgets yet
               </h3>
               <p className="text-sm text-white/50 max-w-sm mx-auto mb-6">
@@ -606,7 +606,7 @@ export default function BudgetsPage() {
                         />
                       </div>
                       <div className="min-w-0">
-                        <h3 className="text-base font-semibold text-white truncate">
+                        <h3 className="text-base font-semibold text-white truncate font-heading">
                           {budget.category}
                         </h3>
                         <p className="text-xs text-white/50">

@@ -12,12 +12,14 @@ import {
 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-import { Link, useParams, useNavigate } from 'react-router-dom'
+import { Link, useParams, useNavigate, useLocation } from 'react-router-dom'
 import { authService } from '../../services/authService'
 
 function ResetPasswordPage() {
-  const { token } = useParams()
+  const { token: urlToken } = useParams()
+  const location = useLocation()
   const navigate = useNavigate()
+  const token = location.state?.resetToken || urlToken
   const [isSuccess, setIsSuccess] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -62,7 +64,7 @@ function ResetPasswordPage() {
       <div className="min-h-screen flex items-center justify-center p-4">
         <div className="w-full max-w-md bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 md:p-10 text-center">
           <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
-          <h1 className="text-xl font-semibold text-white mb-2">Invalid reset link</h1>
+          <h1 className="text-xl font-semibold text-white mb-2 font-heading">Invalid reset link</h1>
           <p className="text-zinc-400 text-sm mb-6">
             This reset link is invalid or has expired.
           </p>
@@ -108,7 +110,7 @@ function ResetPasswordPage() {
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-violet-500 mb-4 shadow-lg shadow-blue-500/25">
             <Sparkles className="w-7 h-7 text-white" />
           </div>
-          <h1 className="text-2xl font-semibold text-white">Set new password</h1>
+          <h1 className="text-2xl font-semibold text-white font-heading">Set new password</h1>
           <p className="text-zinc-400 mt-1 text-sm">
             {isSuccess
               ? 'Your password has been updated'
@@ -163,7 +165,7 @@ function ResetPasswordPage() {
                       required: 'Password is required',
                       minLength: { value: 6, message: 'At least 6 characters' },
                     })}
-                    className={`w-full bg-white/5 border ${
+                    className={`w-full max-w-sm bg-white/5 border ${
                       errors.password ? 'border-red-500/50' : 'border-white/10'
                     } rounded-xl px-10 py-3 text-sm text-white placeholder-zinc-500 outline-none transition-all duration-200 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20`}
                   />
@@ -205,7 +207,7 @@ function ResetPasswordPage() {
                       required: 'Please confirm your password',
                       validate: (val) => val === watchPassword || 'Passwords do not match',
                     })}
-                    className={`w-full bg-white/5 border ${
+                    className={`w-full max-w-sm bg-white/5 border ${
                       errors.confirmPassword ? 'border-red-500/50' : 'border-white/10'
                     } rounded-xl px-10 py-3 text-sm text-white placeholder-zinc-500 outline-none transition-all duration-200 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20`}
                   />

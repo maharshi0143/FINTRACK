@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import toast from 'react-hot-toast'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import {
   TrendingUp,
   TrendingDown,
@@ -27,7 +27,7 @@ import {
   Area,
 } from 'recharts'
 import { analyticsService } from '../../services/analyticsService'
-import { formatCurrency, formatDate, formatMonthYear } from '../../utils/formatters'
+import { formatCurrency, formatDate } from '../../utils/formatters'
 
 /* ───────── Glass card wrapper ───────── */
 function GlassCard({ className = '', children, ...props }) {
@@ -222,7 +222,7 @@ export default function AnalyticsPage() {
     <div className="space-y-8">
       {/* ── Header ── */}
       <motion.div
-        className="flex items-center justify-between"
+        className="flex items-center justify-between flex-wrap gap-3"
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
@@ -232,7 +232,7 @@ export default function AnalyticsPage() {
             <PieChartIcon className="w-6 h-6 text-violet-400" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-white">Analytics</h1>
+            <h1 className="text-2xl font-bold text-white font-heading">Analytics</h1>
             <p className="text-sm text-white/50">
               Visual insights into your financial activity
             </p>
@@ -278,9 +278,9 @@ export default function AnalyticsPage() {
             <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center mx-auto mb-4">
               <PieChartIcon className="w-8 h-8 text-white/30" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">
-              No analytics data yet
-            </h3>
+<h3 className="text-lg font-semibold text-white mb-2 font-heading">
+                  No analytics data yet
+                </h3>
             <p className="text-sm text-white/50 max-w-sm mx-auto mb-6">
               Start adding transactions to see your spending patterns,
               trends, and financial insights come to life.
@@ -385,7 +385,7 @@ export default function AnalyticsPage() {
               <GlassCard className="p-5 h-full">
                 <div className="flex items-center gap-2 mb-5">
                   <BarChart3 className="w-5 h-5 text-blue-400" />
-                  <h2 className="text-base font-semibold text-white">
+                  <h2 className="text-base font-semibold text-white font-heading">
                     Income vs Expenses
                   </h2>
                 </div>
@@ -464,7 +464,7 @@ export default function AnalyticsPage() {
               <GlassCard className="p-5 h-full">
                 <div className="flex items-center gap-2 mb-5">
                   <PieChartIcon className="w-5 h-5 text-amber-400" />
-                  <h2 className="text-base font-semibold text-white">
+                  <h2 className="text-base font-semibold text-white font-heading">
                     Spending by Category
                   </h2>
                 </div>
@@ -477,7 +477,7 @@ export default function AnalyticsPage() {
                   </div>
                 ) : (
                   <div className="flex flex-col items-center">
-                    <div className="relative h-56 w-56 mx-auto">
+                    <div className="relative h-48 w-48 sm:h-56 sm:w-56 mx-auto">
                       <ResponsiveContainer width="100%" height="100%">
                         <PieChart>
                           <Pie
@@ -555,7 +555,7 @@ export default function AnalyticsPage() {
                     </div>
 
                     {/* Legend */}
-                    <div className="w-full mt-5 grid grid-cols-2 gap-x-6 gap-y-2">
+                    <div className="w-full mt-5 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
                       {categoryData.map((entry, idx) => {
                         const total = categoryData.reduce((s, c) => s + Number(c.total || 0), 0)
                         const pct = ((Number(entry.total) / (total || 1)) * 100).toFixed(1)
@@ -598,7 +598,7 @@ export default function AnalyticsPage() {
               <GlassCard className="p-5 h-full">
                 <div className="flex items-center gap-2 mb-5">
                   <ArrowDownRight className="w-5 h-5 text-rose-400" />
-                  <h2 className="text-base font-semibold text-white">
+                  <h2 className="text-base font-semibold text-white font-heading">
                     Top Expenses
                   </h2>
                 </div>
@@ -654,7 +654,7 @@ export default function AnalyticsPage() {
               <GlassCard className="p-5 h-full">
                 <div className="flex items-center gap-2 mb-5">
                   <TrendingDown className="w-5 h-5 text-rose-400" />
-                  <h2 className="text-base font-semibold text-white">
+                  <h2 className="text-base font-semibold text-white font-heading">
                     Expense Trend
                   </h2>
                 </div>
@@ -711,7 +711,7 @@ export default function AnalyticsPage() {
                             v >= 1000 ? `₹${(v / 1000).toFixed(0)}k` : `₹${v}`
                           }
                         />
-                        <Tooltip content={<CustomChartTooltip />} contentStyle={{ backgroundColor: '#18181b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)' }} />
+                        <Tooltip content={<CustomChartTooltip />} />
                         <Area
                           type="monotone"
                           dataKey="expense"

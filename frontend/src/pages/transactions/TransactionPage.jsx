@@ -66,8 +66,8 @@ const glassCard = 'backdrop-blur-xl bg-white/5 border border-white/10 rounded-2x
 /* ─── Skeleton component for loading rows ─── */
 function SkeletonRow() {
   return (
-    <div className={`${glassCard} px-6 py-5 flex items-center justify-between animate-pulse`}>
-      <div className="flex items-center gap-4">
+    <div className={`${glassCard} px-4 sm:px-6 py-4 flex items-center justify-between animate-pulse`}>
+      <div className="flex items-center gap-3 sm:gap-4">
         <div className="h-11 w-11 rounded-xl bg-white/10" />
         <div className="space-y-2">
           <div className="h-4 w-36 rounded bg-white/10" />
@@ -417,7 +417,7 @@ function TransactionPage() {
             <Receipt className="text-blue-400" size={24} />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-white">Transactions</h1>
+            <h1 className="text-3xl font-bold text-white font-heading">Transactions</h1>
             <p className="text-slate-400 text-sm mt-0.5">
               Manage your income and expenses
             </p>
@@ -481,8 +481,8 @@ function TransactionPage() {
 
         {/* Second row: date range + sort + clear */}
         <div className="flex items-center gap-3 flex-wrap">
-          <div className="flex items-center gap-2">
-            <Calendar size={14} className="text-slate-500" />
+          <div className="flex items-center gap-2 flex-wrap">
+            <Calendar size={14} className="text-slate-500 flex-shrink-0" />
             <input
               type="date"
               value={startDate}
@@ -490,7 +490,7 @@ function TransactionPage() {
                 setStartDate(e.target.value)
                 setCurrentPage(1)
               }}
-              className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500/40 [color-scheme:dark]"
+              className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500/40 [color-scheme:dark] max-w-[140px]"
             />
             <span className="text-slate-600 text-xs">to</span>
             <input
@@ -500,7 +500,7 @@ function TransactionPage() {
                 setEndDate(e.target.value)
                 setCurrentPage(1)
               }}
-              className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500/40 [color-scheme:dark]"
+              className="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500/40 [color-scheme:dark] max-w-[140px]"
             />
           </div>
 
@@ -549,7 +549,7 @@ function TransactionPage() {
           <div className="h-16 w-16 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-4">
             <AlertCircle className="text-red-400" size={28} />
           </div>
-          <p className="text-white font-semibold text-lg">Failed to load transactions</p>
+          <p className="text-white font-semibold text-lg font-heading">Failed to load transactions</p>
           <p className="text-slate-500 text-sm mt-1 text-center max-w-xs mb-4">{fetchError}</p>
           <button
             onClick={() => fetchTransactions()}
@@ -567,7 +567,7 @@ function TransactionPage() {
           <div className="h-16 w-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-4">
             <Receipt className="text-slate-500" size={28} />
           </div>
-          <p className="text-white font-semibold text-lg">No transactions found</p>
+          <p className="text-white font-semibold text-lg font-heading">No transactions found</p>
           <p className="text-slate-500 text-sm mt-1 text-center max-w-xs">
             {activeFilterCount > 0
               ? 'Try adjusting your search or filters to find what you\'re looking for.'
@@ -602,10 +602,10 @@ function TransactionPage() {
                   variants={itemVariants}
                   exit={{ opacity: 0, scale: 0.95, y: -8, transition: { duration: 0.15 } }}
                   whileHover={{ scale: 1.01, transition: { duration: 0.15 } }}
-                  className={`${glassCard} px-6 py-4 flex items-center justify-between group cursor-default`}
+                  className={`${glassCard} px-4 sm:px-6 py-4 flex items-center justify-between group cursor-default`}
                 >
                   {/* Left: type icon */}
-                  <div className="flex items-center gap-4 flex-1 min-w-0">
+                  <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
                     <div
                       className={`h-11 w-11 rounded-xl flex items-center justify-center shrink-0 ${
                         isIncome
@@ -631,7 +631,7 @@ function TransactionPage() {
                   </div>
 
                   {/* Right: amount + actions */}
-                  <div className="flex items-center gap-3 shrink-0 ml-4">
+                  <div className="flex items-center gap-2 sm:gap-3 shrink-0 ml-3 sm:ml-4">
                     <span
                       className={`font-bold text-sm tabular-nums ${
                         isIncome ? 'text-emerald-400' : 'text-red-400'
@@ -738,7 +738,7 @@ function TransactionPage() {
                 <X size={18} />
               </button>
 
-              <h2 className="text-xl font-bold text-white mb-6">
+              <h2 className="text-xl font-bold text-white mb-6 font-heading">
                 {editingTransaction ? 'Edit Transaction' : 'Add Transaction'}
               </h2>
 
@@ -909,7 +909,7 @@ function TransactionPage() {
                   <Trash2 size={18} className="text-red-400" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white">Delete Transaction</h3>
+                  <h3 className="text-lg font-bold text-white font-heading">Delete Transaction</h3>
                   <p className="text-slate-400 text-sm">This action cannot be undone.</p>
                 </div>
               </div>

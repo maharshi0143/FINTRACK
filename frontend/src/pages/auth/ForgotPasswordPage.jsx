@@ -28,7 +28,7 @@ function ForgotPasswordPage() {
       const token = response?.data?.data?.resetToken
 
       if (token) {
-        navigate(`/reset-password/${token}`)
+        navigate('/reset-password', { state: { resetToken: token } })
       } else {
         toast.success('If an account exists with that email, you can proceed')
         navigate('/')
@@ -70,7 +70,7 @@ function ForgotPasswordPage() {
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-violet-500 mb-4 shadow-lg shadow-blue-500/25">
             <Sparkles className="w-7 h-7 text-white" />
           </div>
-          <h1 className="text-2xl font-semibold text-white">Reset password</h1>
+          <h1 className="text-2xl font-semibold text-white font-heading">Reset password</h1>
           <p className="text-zinc-400 mt-1 text-sm">
             Enter your email to get a reset link
           </p>
@@ -102,7 +102,7 @@ function ForgotPasswordPage() {
                     message: 'Only @gmail.com emails are allowed',
                   },
                 })}
-                className={`w-full bg-white/5 border ${
+                className={`w-full max-w-sm bg-white/5 border ${
                   errors.email ? 'border-red-500/50' : 'border-white/10'
                 } rounded-xl px-10 py-3 text-sm text-white placeholder-zinc-500 outline-none transition-all duration-200 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20`}
               />

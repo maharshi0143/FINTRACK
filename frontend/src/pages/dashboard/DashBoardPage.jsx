@@ -117,7 +117,7 @@ function GlassTooltip({ active, payload, label }) {
 function SectionHeader({ title, action }) {
   return (
     <div className="flex items-center justify-between mb-6">
-      <h3 className="text-lg font-semibold text-white/90">{title}</h3>
+      <h3 className="text-lg font-semibold text-white/90 font-heading">{title}</h3>
       {action}
     </div>
   )
@@ -540,7 +540,7 @@ function EmptyState() {
       <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-white/5 flex items-center justify-center">
         <Wallet className="w-10 h-10 text-white/30" />
       </div>
-      <h3 className="text-xl font-semibold text-white/80 mb-2">No transactions yet</h3>
+      <h3 className="text-xl font-semibold text-white/80 mb-2 font-heading">No transactions yet</h3>
       <p className="text-white/40 mb-8 max-w-md mx-auto leading-relaxed">
         Start tracking your finances by adding your first transaction.
         Your dashboard will come to life with charts, insights, and smart
@@ -572,7 +572,7 @@ function ErrorState({ message, onRetry }) {
       <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-rose-500/10 flex items-center justify-center">
         <TrendingDown className="w-8 h-8 text-rose-400" />
       </div>
-      <h3 className="text-xl font-semibold text-white/80 mb-2">Failed to load dashboard</h3>
+      <h3 className="text-xl font-semibold text-white/80 mb-2 font-heading">Failed to load dashboard</h3>
       <p className="text-white/40 mb-8 max-w-md mx-auto">{message}</p>
       <button
         onClick={onRetry}
@@ -674,7 +674,7 @@ function DashBoardPage() {
       <PageTransition>
         <div className="space-y-8">
           <div>
-            <h1 className="text-3xl font-bold text-white">Dashboard</h1>
+            <h1 className="text-3xl font-bold text-white font-heading">Dashboard</h1>
             <p className="text-white/40 mt-1">Your financial overview</p>
           </div>
           <ErrorState message={error} onRetry={fetchData} />
@@ -696,7 +696,7 @@ function DashBoardPage() {
           className="space-y-8"
         >
           <motion.div variants={itemVariants}>
-            <h1 className="text-3xl font-bold text-white">Dashboard</h1>
+            <h1 className="text-3xl font-bold text-white font-heading">Dashboard</h1>
             <p className="text-white/40 mt-1">Your financial overview</p>
           </motion.div>
           <EmptyState />
@@ -718,7 +718,7 @@ function DashBoardPage() {
       >
       {/* ---- Header ---- */}
       <motion.div variants={itemVariants}>
-        <h1 className="text-3xl font-bold text-white">Dashboard</h1>
+        <h1 className="text-3xl font-bold text-white font-heading">Dashboard</h1>
         <p className="text-white/40 mt-1">Your financial overview</p>
       </motion.div>
 

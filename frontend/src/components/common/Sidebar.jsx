@@ -10,7 +10,7 @@ import {
   User,
   LogOut,
   X,
-  TrendingDown,
+  TrendingUp,
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -29,15 +29,15 @@ function Sidebar({ onClose }) {
   const location = useLocation();
 
   return (
-    <aside className="h-full w-72 bg-slate-900/90 backdrop-blur-xl border-r border-white/5 flex flex-col">
+    <aside className="h-full w-72 bg-slate-900/20 backdrop-blur-2xl border-r border-white/5 flex flex-col">
       {/* Logo */}
       <div className="flex items-center justify-between px-6 py-5 border-b border-white/5">
         <NavLink to="/dashboard" className="flex items-center gap-3 group">
           <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
-            <TrendingDown className="w-5 h-5 text-white" />
+            <TrendingUp className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h1 className="text-lg font-semibold text-white group-hover:text-blue-400 transition-colors">
+            <h1 className="text-lg font-semibold text-white group-hover:text-blue-400 transition-colors font-heading">
               FinTrack
             </h1>
             <p className="text-xs text-slate-500">Personal Finance</p>

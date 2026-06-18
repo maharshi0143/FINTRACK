@@ -70,7 +70,7 @@ function RegisterPage() {
           <div className="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-gradient-to-br from-blue-500 to-violet-500 mb-3 shadow-lg shadow-blue-500/25">
             <Sparkles className="w-5 h-5 text-white" />
           </div>
-          <h1 className="text-lg font-semibold text-white">Create account</h1>
+          <h1 className="text-lg font-semibold text-white font-heading">Create account</h1>
           <p className="text-zinc-400 text-xs mt-0.5">Get started with FinTrack</p>
         </div>
 
@@ -85,7 +85,7 @@ function RegisterPage() {
                 autoComplete="name"
                 placeholder="John Doe"
                 {...register('name', { required: 'Name is required' })}
-                className={`w-full bg-white/5 border ${errors.name ? 'border-red-500/50' : 'border-white/10'} rounded-xl pl-9 pr-3 py-2 text-sm text-white placeholder-zinc-500 outline-none transition-all duration-200 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20`}
+                className={`w-full max-w-sm bg-white/5 border ${errors.name ? 'border-red-500/50' : 'border-white/10'} rounded-xl pl-9 pr-3 py-2 text-sm text-white placeholder-zinc-500 outline-none transition-all duration-200 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20`}
               />
             </div>
             {errors.name && (
@@ -101,9 +101,9 @@ function RegisterPage() {
                 id="email"
                 type="email"
                 autoComplete="email"
-                placeholder="you@example.com"
+                placeholder="you@gmail.com"
                 {...register('email', { required: 'Email is required', pattern: { value: /^[A-Z0-9._%+-]+@gmail\.com$/i, message: 'Only @gmail.com emails are allowed' } })}
-                className={`w-full bg-white/5 border ${errors.email ? 'border-red-500/50' : 'border-white/10'} rounded-xl pl-9 pr-3 py-2 text-sm text-white placeholder-zinc-500 outline-none transition-all duration-200 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20`}
+                className={`w-full max-w-sm bg-white/5 border ${errors.email ? 'border-red-500/50' : 'border-white/10'} rounded-xl pl-9 pr-3 py-2 text-sm text-white placeholder-zinc-500 outline-none transition-all duration-200 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20`}
               />
             </div>
             {errors.email && (
@@ -121,7 +121,7 @@ function RegisterPage() {
                 autoComplete="new-password"
                 placeholder="Min. 6 characters"
                 {...register('password', { required: 'Password is required', minLength: { value: 6, message: 'At least 6 chars' } })}
-                className={`w-full bg-white/5 border ${errors.password ? 'border-red-500/50' : 'border-white/10'} rounded-xl pl-9 pr-9 py-2 text-sm text-white placeholder-zinc-500 outline-none transition-all duration-200 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20`}
+                className={`w-full max-w-sm bg-white/5 border ${errors.password ? 'border-red-500/50' : 'border-white/10'} rounded-xl pl-9 pr-9 py-2 text-sm text-white placeholder-zinc-500 outline-none transition-all duration-200 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20`}
               />
               <button type="button" onClick={() => setShowPassword(p => !p)} aria-label={showPassword ? 'Hide password' : 'Show password'} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 transition-colors" tabIndex={-1}>
                 {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
@@ -142,7 +142,7 @@ function RegisterPage() {
                 autoComplete="new-password"
                 placeholder="Repeat your password"
                 {...register('confirmPassword', { required: 'Please confirm', validate: (val) => val === watchPassword || 'Passwords do not match' })}
-                className={`w-full bg-white/5 border ${errors.confirmPassword ? 'border-red-500/50' : 'border-white/10'} rounded-xl pl-9 pr-9 py-2 text-sm text-white placeholder-zinc-500 outline-none transition-all duration-200 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20`}
+                className={`w-full max-w-sm bg-white/5 border ${errors.confirmPassword ? 'border-red-500/50' : 'border-white/10'} rounded-xl pl-9 pr-9 py-2 text-sm text-white placeholder-zinc-500 outline-none transition-all duration-200 focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20`}
               />
               <button type="button" onClick={() => setShowConfirmPassword(p => !p)} aria-label={showConfirmPassword ? 'Hide password' : 'Show password'} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 transition-colors" tabIndex={-1}>
                 {showConfirmPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}

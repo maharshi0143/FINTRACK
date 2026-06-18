@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  User as UserIcon,
   Settings,
   LogOut,
   Shield,
@@ -12,7 +11,6 @@ import {
   Eye,
   EyeOff,
   AlertCircle,
-  ChevronRight,
 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -293,7 +291,7 @@ function ProfilePage() {
           <span className="text-2xl font-bold text-white">{getInitials(displayName)}</span>
         </div>
         <div>
-          <h1 className="text-2xl font-bold text-white">{displayName}</h1>
+          <h1 className="text-2xl font-bold text-white font-heading">{displayName}</h1>
           <p className="text-sm text-slate-400">{displayEmail}</p>
           {memberSince && (
             <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
@@ -314,7 +312,7 @@ function ProfilePage() {
       >
         <div className="flex items-center gap-2 mb-5">
           <Settings size={16} className="text-blue-400" />
-          <h2 className="text-lg font-semibold text-white">Edit Profile</h2>
+          <h2 className="text-lg font-semibold text-white font-heading">Edit Profile</h2>
         </div>
 
         <form onSubmit={handleSubmit(onSaveProfile)} className="space-y-4">
@@ -392,7 +390,7 @@ function ProfilePage() {
         >
           <div className="flex items-center gap-2 mb-5">
             <Shield size={16} className="text-emerald-400" />
-            <h2 className="text-lg font-semibold text-white">Change Password</h2>
+            <h2 className="text-lg font-semibold text-white font-heading">Change Password</h2>
           </div>
 
           <div className="space-y-4">
@@ -415,6 +413,7 @@ function ProfilePage() {
                   type="button"
                   onClick={() => setShowCurrent((p) => !p)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+                  aria-label={showCurrent ? 'Hide current password' : 'Show current password'}
                 >
                   {showCurrent ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -440,6 +439,7 @@ function ProfilePage() {
                   type="button"
                   onClick={() => setShowNew((p) => !p)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+                  aria-label={showNew ? 'Hide new password' : 'Show new password'}
                 >
                   {showNew ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -465,6 +465,7 @@ function ProfilePage() {
                   type="button"
                   onClick={() => setShowConfirm((p) => !p)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300 transition-colors"
+                  aria-label={showConfirm ? 'Hide confirm password' : 'Show confirm password'}
                 >
                   {showConfirm ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -512,7 +513,7 @@ function ProfilePage() {
       >
         <div className="flex items-center gap-2 mb-5">
           <Mail size={16} className="text-violet-400" />
-          <h2 className="text-lg font-semibold text-white">Account Info</h2>
+          <h2 className="text-lg font-semibold text-white font-heading">Account Info</h2>
         </div>
 
         <div className="space-y-3">
@@ -552,7 +553,7 @@ function ProfilePage() {
       >
         <div className="flex items-center gap-2 mb-3">
           <AlertCircle size={16} className="text-red-400" />
-          <h2 className="text-lg font-semibold text-red-400">Danger Zone</h2>
+          <h2 className="text-lg font-semibold text-red-400 font-heading">Danger Zone</h2>
         </div>
         <p className="text-sm text-slate-400 mb-4">
           Once you delete your account, there is no going back. All your data, transactions,
@@ -616,7 +617,7 @@ function ProfilePage() {
                   <AlertCircle size={20} className="text-red-400" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-white">Delete Account</h3>
+                  <h3 className="text-lg font-semibold text-white font-heading">Delete Account</h3>
                   <p className="text-xs text-slate-400">This action is permanent</p>
                 </div>
               </div>

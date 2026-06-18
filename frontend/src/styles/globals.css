@@ -1,5 +1,11 @@
 @import "tailwindcss";
 @import "@fontsource/inter";
+@import "@fontsource/plus-jakarta-sans/600.css";
+@import "@fontsource/plus-jakarta-sans/700.css";
+
+@theme {
+    --font-heading: "Plus Jakarta Sans", sans-serif;
+}
 
 :root {
     color-scheme: dark;
@@ -23,10 +29,11 @@ html {
 
 body {
     font-family: "Inter", sans-serif;
-    background:
-        radial-gradient(circle at top, rgba(59, 130, 246, 0.08), transparent 25%),
-        radial-gradient(circle at right, rgba(139, 92, 246, 0.08), transparent 25%),
-        var(--background);
+    background-color: var(--background);
+    background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255, 255, 255, 0.025) 39px, rgba(255, 255, 255, 0.025) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255, 255, 255, 0.025) 39px, rgba(255, 255, 255, 0.025) 40px);
+    background-size: 40px 40px, 40px 40px;
     color: var(--foreground);
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;

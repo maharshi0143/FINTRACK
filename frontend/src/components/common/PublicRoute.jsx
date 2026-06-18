@@ -7,7 +7,7 @@ function PublicRoute({ children }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-8">
+      <div className="min-h-screen flex items-center justify-center p-8">
         <div className="w-full max-w-md space-y-6">
           <Skeleton className="h-8 w-48 mx-auto" />
           <Skeleton className="h-4 w-64 mx-auto" />

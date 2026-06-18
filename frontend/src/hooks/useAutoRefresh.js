@@ -4,24 +4,28 @@ import { useSocket } from './useSocket';
 export function useAutoRefresh(fetchFn, events = []) {
   const { socketService, connected } = useSocket();
   const fetchRef = useRef(fetchFn);
+  const eventsRef = useRef(events);
 
   fetchRef.current = fetchFn;
+  eventsRef.current = events;
 
   const handleEvent = useCallback(() => {
     fetchRef.current();
   }, []);
 
   useEffect(() => {
-    if (!socketService.socket || !connected || events.length === 0) return;
+    const socket = socketService.socket;
+    if (!socket || !connected || eventsRef.current.length === 0) return;
 
-    events.forEach((event) => {
-      socketService.socket?.on(event, handleEvent);
+    const currentEvents = eventsRef.current;
+    currentEvents.forEach((event) => {
+      socket.on(event, handleEvent);
     });
 
     return () => {
-      events.forEach((event) => {
-        socketService.socket?.off(event, handleEvent);
+      currentEvents.forEach((event) => {
+        socket.off(event, handleEvent);
       });
     };
-  }, [socketService.socket, connected, handleEvent, events.join(',')]);
+  }, [socketService.socket, connected, handleEvent]);
 }

@@ -12,12 +12,6 @@ function Navbar({ sidebarOpen, setSidebarOpen }) {
   const [showDropdown, setShowDropdown] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
 
-  useEffect(() => {
-    fetchUnreadCount();
-    const interval = setInterval(fetchUnreadCount, 30000);
-    return () => clearInterval(interval);
-  }, [fetchUnreadCount]);
-
   const fetchUnreadCount = async () => {
     try {
       const { data } = await api.get('/notifications', {
@@ -31,8 +25,14 @@ function Navbar({ sidebarOpen, setSidebarOpen }) {
     }
   };
 
+  useEffect(() => {
+    fetchUnreadCount();
+    const interval = setInterval(fetchUnreadCount, 30000);
+    return () => clearInterval(interval);
+  }, [fetchUnreadCount]);
+
   return (
-    <header className="sticky top-0 z-30 bg-slate-950/80 backdrop-blur-xl border-b border-white/5">
+    <header className="sticky top-0 z-30 bg-slate-950/20 backdrop-blur-2xl border-b border-white/5">
       <div className="flex items-center justify-between lg:justify-end gap-4 px-6 py-4">
         {/* Mobile hamburger */}
         <button

@@ -48,6 +48,14 @@ function AnimatedRoutes() {
           }
         />
         <Route
+          path="/reset-password"
+          element={
+            <PublicRoute>
+              <ResetPasswordPage />
+            </PublicRoute>
+          }
+        />
+        <Route
           path="/reset-password/:token"
           element={
             <PublicRoute>
@@ -132,7 +140,7 @@ function AnimatedRoutes() {
         <Route
           path="*"
           element={
-            <div className="min-h-screen flex items-center justify-center bg-slate-950 text-white">
+            <div className="min-h-screen flex items-center justify-center text-white">
               <div className="text-center">
                 <h1 className="text-6xl font-bold bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
                   404

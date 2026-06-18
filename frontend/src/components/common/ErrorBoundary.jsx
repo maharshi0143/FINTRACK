@@ -23,7 +23,7 @@ class ErrorBoundary extends Component {
             <div className="w-16 h-16 rounded-2xl bg-red-500/10 border border-red-500/20 flex items-center justify-center mx-auto mb-4">
               <AlertTriangle size={28} className="text-red-400" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">
+            <h3 className="text-lg font-semibold text-white mb-2 font-heading">
               Something went wrong
             </h3>
             <p className="text-sm text-slate-400 mb-6">

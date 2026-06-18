@@ -8,7 +8,6 @@ import {
   MessageSquare,
   Lightbulb,
   TrendingUp,
-  TrendingDown,
   DollarSign,
   Loader2,
   ChevronRight,
@@ -308,7 +307,7 @@ function AIAssistantPage() {
             <Sparkles size={20} className="text-blue-400" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent font-heading">
               AI Assistant
             </h1>
             <p className="text-sm text-slate-400">Your personal finance advisor</p>
@@ -349,12 +348,12 @@ function AIAssistantPage() {
                   <div className="w-8 h-8 rounded-lg bg-blue-500/20 border border-blue-500/30 flex items-center justify-center">
                     <TrendingUp size={16} className="text-blue-400" />
                   </div>
-                  <h3 className="text-sm font-semibold text-white">Monthly Summary</h3>
+                  <h3 className="text-sm font-semibold text-white font-heading">Monthly Summary</h3>
                 </div>
                 <button
                   onClick={fetchMonthlySummary}
                   className="text-slate-500 hover:text-blue-400 transition-colors p-1 rounded-lg hover:bg-white/5 opacity-0 group-hover:opacity-100"
-                  title="Refresh"
+                  aria-label="Refresh monthly summary"
                 >
                   <Loader2 size={14} />
                 </button>
@@ -416,12 +415,12 @@ function AIAssistantPage() {
                   <div className="w-8 h-8 rounded-lg bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center">
                     <Lightbulb size={16} className="text-emerald-400" />
                   </div>
-                  <h3 className="text-sm font-semibold text-white">Savings Tip</h3>
+                  <h3 className="text-sm font-semibold text-white font-heading">Savings Tip</h3>
                 </div>
                 <button
                   onClick={fetchSavingsSuggestion}
                   className="text-slate-500 hover:text-emerald-400 transition-colors p-1 rounded-lg hover:bg-white/5 opacity-0 group-hover:opacity-100"
-                  title="Refresh"
+                  aria-label="Refresh savings tip"
                 >
                   <Loader2 size={14} />
                 </button>
@@ -461,12 +460,12 @@ function AIAssistantPage() {
                   <div className="w-8 h-8 rounded-lg bg-violet-500/20 border border-violet-500/30 flex items-center justify-center">
                     <DollarSign size={16} className="text-violet-400" />
                   </div>
-                  <h3 className="text-sm font-semibold text-white">Expense Forecast</h3>
+                  <h3 className="text-sm font-semibold text-white font-heading">Expense Forecast</h3>
                 </div>
                 <button
                   onClick={fetchForecast}
                   className="text-slate-500 hover:text-violet-400 transition-colors p-1 rounded-lg hover:bg-white/5 opacity-0 group-hover:opacity-100"
-                  title="Refresh"
+                  aria-label="Refresh expense forecast"
                 >
                   <Loader2 size={14} />
                 </button>
@@ -501,7 +500,7 @@ function AIAssistantPage() {
               <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500/20 to-violet-500/20 border border-blue-500/30 flex items-center justify-center mb-4">
                 <Bot size={32} className="text-blue-400" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-1">Hello! I&apos;m your AI assistant</h3>
+              <h3 className="text-lg font-semibold text-white mb-1 font-heading">Hello! I&apos;m your AI assistant</h3>
               <p className="text-sm text-slate-400 max-w-md">
                 Ask me anything about your finances — track spending, find savings, forecast
                 expenses, or get a monthly report.
@@ -632,6 +631,7 @@ function AIAssistantPage() {
                   <button
                     onClick={() => { setShowParser(false); setParseText(''); }}
                     className="text-slate-500 hover:text-slate-300 transition-colors p-1"
+                    aria-label="Close expense parser"
                   >
                     <ChevronRight size={14} className="rotate-180" />
                   </button>
